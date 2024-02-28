@@ -9,14 +9,9 @@ import org.openqa.selenium.TakesScreenshot;
 import org.apache.commons.io.FileUtils; 
 import java.io.File;
 import java.io.IOException;
+import org.openqa.selenium.support.locators.RelativeLocator;
 
-/**
- * This class demonstrates Selenium locator APIs to identify HTML elements.
- * 
- * Details in Selenium documentation https://www.selenium.dev/documentation/webdriver/elements/locators/
- * 
- * @author Ahsan Habib
- */
+
 public class SeleniumOperations {
 
 	public static void sleep(int sec) {
@@ -41,53 +36,30 @@ public class SeleniumOperations {
 		
 		sleep(2);
 	
-		// Load a webpage in chromium browser.
 		driver.get(url);
+
+		WebElement firstNameLabel = driver.findElement(By.xpath("//label[@for='firstname']"));
+        WebElement firstNameInput = driver.findElement(RelativeLocator.with(By.tagName("input")).near(firstNameLabel));
+        firstNameInput.sendKeys("Wenzong");
+
+		WebElement lastNameInput = driver.findElement(RelativeLocator.with(By.tagName("input")).below(firstNameInput));
+		lastNameInput.sendKeys("Xuan");
 		
-		/*
-		 * How to identify a HTML input field -
-		 * Step 1: Inspect the webpage, 
-		 * Step 2: locate the input field, 
-		 * Step 3: Find out how to identify it, by id/name/...
-		 */
-		
-		// Find first input field which is firstname
-		WebElement firstName = driver.findElement(By.id("firstname"));
-		System.out.println("Found element: " + firstName);
-		// Send first name
-		firstName.sendKeys("Wenzong");
-		
-		/*
-		 * Find following input fields and populate with values
-		 */
-		WebElement lastName = driver.findElement(By.id("lastname"));
-		System.out.println("Found element: " + lastName);
-	    lastName.sendKeys("Xuan");
-		
-	    WebElement phone = driver.findElement(By.id("phoneNumber"));
-		System.out.println("Found element: " + phone);
-		phone.sendKeys("0400000000");
-		
-		WebElement email = driver.findElement(By.id("email"));
-	    email.sendKeys("123456@gmail.com");
-	    
-		/*
-		 * Identify button 'Create account' and click to submit using Selenium API.
-		 */
+		WebElement PhoneInput = driver.findElement(RelativeLocator.with(By.tagName("input")).below(lastNameInput));
+		PhoneInput.sendKeys("0400000000");
+
+		WebElement EmailInput = driver.findElement(RelativeLocator.with(By.tagName("input")).below(PhoneInput));
+		EmailInput.sendKeys("123456@gmail.com");
+
 	    WebElement createAccountButton = driver.findElement(By.xpath("//button[@data-testid='account-action-btn']"));
 	    createAccountButton.click();
 		
-		
-		/*
-		 * Take screenshot using selenium API.
-		 */
 	    File scrFile = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
 	    try {
 	        FileUtils.copyFile(scrFile, new File("/Users/wenzongxuan/Downloads/screenshot.png"));
 	    } catch (IOException e) {
 	        e.printStackTrace();
 	    }
-		
 		
 		// Sleep a while
 		sleep(2);
